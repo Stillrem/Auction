@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#121212">
+    <link rel="manifest" href="manifest.json">
+    <title>Auction Invoice Calculator (PWA)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #121212;
+            color: #FFFFFF;
+            padding: 20px;
+            margin: 0;
+        }
+        .invoice {
+            max-width: 340px;
+            margin: auto;
+            padding: 20px;
+            background: #1E1E1E;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 16px;
+        }
+        .total {
+            font-weight: bold;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+            font-size: 18px;
+            color: #00E676;
+        }
+        label {
+            margin-top: 12px;
+            display: block;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background: #2C2C2C;
+            color: #FFFFFF;
+            border: 1px solid #444;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 16px;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            background: linear-gradient(to right, #00E676, #1DE9B6);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: linear-gradient(to right, #1DE9B6, #00E676);
+        }
+    </style>
+</head>
+<body>
+
+<div class="invoice">
+    <label for="bidTotal">Bid Total ($):</label>
+    <input type="number" id="bidTotal" value="26" step="0.01">
+
+    <label for="numLots">Number of Lots:</label>
+    <input type="number" id="numLots" value="2">
+
+    <button onclick="calculate()">Calculate Invoice</button>
+
+    <div class="row"><span>Bid Total:</span><span id="displayBid">$0.00</span></div>
+    <div class="row"><span>Auction Premium (15%):</span><span id="auctionPremium">$0.00</span></div>
+    <div class="row"><span>Lot Fee ($2/item):</span><span id="lotFee">$0.00</span></div>
+    <div class="row"><span>Sub Total:</span><span id="subTotal">$0.00</span></div>
+    <div class="row"><span>Sales Tax (8.75%):</span><span id="salesTax">$0.00</span></div>
+    <div class="row total"><span>Total Invoice:</span><span id="totalInvoice">$0.00</span></div>
+</div>
+
+<script>
+function calculate() {
+    const bidTotal = parseFloat(document.getElementById('bidTotal').value) || 0;
+    const numLots = parseInt(document.getElementById('numLots').value) || 0;
+
+    const auctionFee = bidTotal * 0.15;
+    const lotFee = numLots * 2;
+    const subTotal = bidTotal + auctionFee + lotFee;
+    const salesTax = subTotal * 0.0875;
+    const total = subTotal + salesTax;
+
+    document.getElementById('displayBid').textContent = `$${bidTotal.toFixed(2)}`;
+    document.getElementById('auctionPremium').textContent = `$${auctionFee.toFixed(2)}`;
+    document.getElementById('lotFee').textContent = `$${lotFee.toFixed(2)}`;
+    document.getElementById('subTotal').textContent = `$${subTotal.toFixed(2)}`;
+    document.getElementById('salesTax').textContent = `$${salesTax.toFixed(2)}`;
+    document.getElementById('totalInvoice').textContent = `$${total.toFixed(2)}`;
+}
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js');
+    });
+}
+</script>
+
+</body>
+</html>
