@@ -93,15 +93,22 @@
       const bidTotal = parseFloat(bidInput.value) || 0;
       const numLots = parseInt(lotInput.value) || 0;
 
-      localStorage.setItem("bidTotal", bidTotal);
-      localStorage.setItem("numLots", numLots);
-
       const auctionFee = bidTotal * 0.15;
       const lotFee = numLots * 2;
       const subTotal = bidTotal + auctionFee + lotFee;
       const salesTax = subTotal * 0.0875;
       const total = subTotal + salesTax;
 
+      // Save all values
+      localStorage.setItem("bidTotal", bidTotal);
+      localStorage.setItem("numLots", numLots);
+      localStorage.setItem("auctionFee", auctionFee.toFixed(2));
+      localStorage.setItem("lotFee", lotFee.toFixed(2));
+      localStorage.setItem("subTotal", subTotal.toFixed(2));
+      localStorage.setItem("salesTax", salesTax.toFixed(2));
+      localStorage.setItem("total", total.toFixed(2));
+
+      // Display results
       document.getElementById("displayBid").textContent = `$${bidTotal.toFixed(2)}`;
       document.getElementById("auctionPremium").textContent = `$${auctionFee.toFixed(2)}`;
       document.getElementById("lotFee").textContent = `$${lotFee.toFixed(2)}`;
@@ -113,8 +120,16 @@
     window.addEventListener("load", function () {
       const bid = localStorage.getItem("bidTotal");
       const lots = localStorage.getItem("numLots");
+
       if (bid !== null) document.getElementById("bidTotal").value = bid;
       if (lots !== null) document.getElementById("numLots").value = lots;
+
+      if (bid !== null) document.getElementById("displayBid").textContent = `$${parseFloat(bid).toFixed(2)}`;
+      if (localStorage.getItem("auctionFee")) document.getElementById("auctionPremium").textContent = `$${localStorage.getItem("auctionFee")}`;
+      if (localStorage.getItem("lotFee")) document.getElementById("lotFee").textContent = `$${localStorage.getItem("lotFee")}`;
+      if (localStorage.getItem("subTotal")) document.getElementById("subTotal").textContent = `$${localStorage.getItem("subTotal")}`;
+      if (localStorage.getItem("salesTax")) document.getElementById("salesTax").textContent = `$${localStorage.getItem("salesTax")}`;
+      if (localStorage.getItem("total")) document.getElementById("totalInvoice").textContent = `$${localStorage.getItem("total")}`;
     });
 
     if ("serviceWorker" in navigator) {
