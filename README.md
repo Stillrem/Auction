@@ -1,5 +1,5 @@
 
-# Auction Invoice Calculator (PWA)
+# Auction Invoice Calculator Justbid (PWA)
 
 This is a fast, mobile-friendly **Progressive Web App (PWA)** designed to calculate auction invoices based on:
 
